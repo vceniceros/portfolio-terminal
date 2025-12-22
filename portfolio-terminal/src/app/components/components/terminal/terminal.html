@@ -1,0 +1,21 @@
+<div class="terminal h-full w-full bg-black text-green-400 text-sm">
+  
+  <div class="overflow-auto flex-grow p-4">
+    <div *ngFor="let cmd of commandHistory; let i = index">
+      <div class="terminal-line">{{ cmd }}</div>
+      <div class="pl-4 text-green-300">{{ output[i] }}</div>
+    </div>
+  </div>
+
+
+  <div class="flex items-center p-4 border-t border-gray-700">
+    <span class="mr-2 text-green-500">[ceni@nb-archceni ~]$</span>
+    <input
+      type="text"
+      [(ngModel)]="currentCommand"
+      (keyup)="handleKeyup($event)"
+      class="bg-transparent text-green-400 outline-none flex-grow"
+      autofocus
+    />
+  </div>
+</div>

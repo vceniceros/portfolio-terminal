@@ -1,21 +1,254 @@
-<div class="terminal h-full w-full bg-black text-green-400 text-sm">
-  
-  <div class="overflow-auto flex-grow p-4">
-    <div *ngFor="let cmd of commandHistory; let i = index">
-      <div class="terminal-line">{{ cmd }}</div>
-      <div class="pl-4 text-green-300">{{ output[i] }}</div>
+<div id="terminal-background">
+  <img
+    id="terminal-background-off"
+    src="/img/monitorborder-off.png"
+    [class.off-visible]="!poweredOn()"
+    alt="Monitor off overlay"
+  />
+
+  <div id="terminal" [class.power-on]="poweredOn()">
+    <div id="terminal-interior">
+      @switch (screen()) {
+        @case ('off') {
+          <div class="screen-center muted">SYSTEM OFFLINE</div>
+        }
+
+        @case ('booting') {
+          <div class="screen-center">{{ bootText() }}</div>
+        }
+
+        @case ('vault-logo') {
+          <div class="screen-center">
+            <div class="big-title">VAULT-TEC</div>
+            <div>{{ bootText() }}</div>
+          </div>
+        }
+
+        @case ('main-menu') {
+          <div class="menu-layout">
+            <div class="pointer-column">
+              @for (pointer of leftPointers; track pointer) {
+                <div>{{ pointer }}</div>
+              }
+            </div>
+
+            <div class="menu-center">
+              <div class="menu-head">ROBCO INDUSTRIES TERMALINK</div>
+              <div class="menu-sub">VALENTINO CENICEROS - PORTFOLIO</div>
+
+              @if (loadError()) {
+                <div class="error-line">{{ loadError() }}</div>
+              }
+
+              <div class="menu-options">
+                @for (option of menuOptions; track option.label) {
+                  <button
+                    type="button"
+                    class="menu-option character"
+                    (mouseenter)="playKeystroke()"
+                    (click)="navigateTo(option.target)"
+                  >
+                    &gt; {{ option.label }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="pointer-column">
+              @for (pointer of rightPointers; track pointer) {
+                <div>{{ pointer }}</div>
+              }
+            </div>
+          </div>
+        }
+
+        @case ('about') {
+          <div class="section">
+            <div class="section-title">&gt; ABOUT ME</div>
+            @if (portfolio(); as data) {
+              <img class="about-photo" [src]="data.aboutMe.photo" alt="Profile photo" />
+              <p class="section-text">{{ aboutText() }}</p>
+            }
+            <button type="button" class="terminal-action character" (mouseenter)="playKeystroke()" (click)="goBack()">
+              [ GO BACK ]
+            </button>
+          </div>
+        }
+
+        @case ('studies') {
+          <div class="section">
+            <div class="section-title">&gt; STUDIES</div>
+            @if (portfolio(); as data) {
+              @for (study of data.studies; track trackByStudy($index, study)) {
+                <div class="list-block">
+                  <div>{{ formatStudyPeriod(study) }} {{ study.title }}</div>
+                  <div>{{ study.place }}</div>
+                  <button
+                    type="button"
+                    class="link-like character"
+                    (mouseenter)="playKeystroke()"
+                    (click)="openLink(study.website)"
+                  >
+                    &gt; VISIT WEBSITE
+                  </button>
+                </div>
+              }
+            }
+            <button type="button" class="terminal-action character" (mouseenter)="playKeystroke()" (click)="goBack()">
+              [ GO BACK ]
+            </button>
+          </div>
+        }
+
+        @case ('projects') {
+          <div class="section">
+            <div class="section-title">&gt; PROJECTS</div>
+            @if (portfolio(); as data) {
+              @for (project of data.projects; track trackByName($index, project)) {
+                <div class="list-block">
+                  <div>{{ project.name }}</div>
+                  <div>{{ project.description }}</div>
+                  <button
+                    type="button"
+                    class="link-like character"
+                    (mouseenter)="playKeystroke()"
+                    (click)="openLink(project.github)"
+                  >
+                    [ GITHUB ]
+                  </button>
+                </div>
+              }
+            }
+            <button type="button" class="terminal-action character" (mouseenter)="playKeystroke()" (click)="goBack()">
+              [ GO BACK ]
+            </button>
+          </div>
+        }
+
+        @case ('languages') {
+          <div class="section">
+            <div class="section-title">&gt; LANGUAGES</div>
+            @if (portfolio(); as data) {
+              @for (language of data.languages; track trackByLanguage($index, language)) {
+                <div class="list-block">
+                  <div>{{ language.name }} <span class="badge">[{{ language.proficiency }}]</span></div>
+                  <div>{{ language.description }}</div>
+                  <div class="projects-line">Projects: {{ language.projects.join(', ') }}</div>
+                </div>
+              }
+            }
+            <button type="button" class="terminal-action character" (mouseenter)="playKeystroke()" (click)="goBack()">
+              [ GO BACK ]
+            </button>
+          </div>
+        }
+
+        @case ('contact-options') {
+          <div class="section">
+            <div class="section-title">&gt; CONTACT ME</div>
+            @if (contactMode() === 'menu') {
+              <button
+                type="button"
+                class="menu-option character"
+                (mouseenter)="playKeystroke()"
+                (click)="navigateTo('contact-message')"
+              >
+                &gt; SEND A MESSAGE
+              </button>
+              <button
+                type="button"
+                class="menu-option character"
+                (mouseenter)="playKeystroke()"
+                (click)="openContactMethods()"
+              >
+                &gt; OTHER CONTACT METHODS
+              </button>
+              <button type="button" class="menu-option character" (mouseenter)="playKeystroke()" (click)="goBack()">
+                &gt; [ GO BACK ]
+              </button>
+            } @else {
+              @if (portfolio(); as data) {
+                <div class="list-block">
+                  EMAIL:
+                  <a class="contact-link character" [href]="'mailto:' + data.contact.email">{{ data.contact.email }}</a>
+                </div>
+                <div class="list-block">PHONE: {{ data.contact.phone }}</div>
+                <div class="list-block">
+                  LINKEDIN:
+                  <a
+                    class="contact-link character"
+                    [href]="data.contact.linkedin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ data.contact.linkedin }}
+                  </a>
+                </div>
+                <div class="list-block">
+                  GITHUB:
+                  <a
+                    class="contact-link character"
+                    [href]="data.contact.github"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {{ data.contact.github }}
+                  </a>
+                </div>
+              }
+              <button type="button" class="terminal-action character" (mouseenter)="playKeystroke()" (click)="goBack()">
+                [ GO BACK ]
+              </button>
+            }
+          </div>
+        }
+
+        @case ('contact-message') {
+          <div class="section">
+            <div class="section-title">&gt; SEND A MESSAGE</div>
+            <label class="prompt" for="contactInput">&gt; {{ currentPrompt() }}: █</label>
+            <input
+              id="contactInput"
+              class="contact-input"
+              [ngModel]="contactInput()"
+              (ngModelChange)="contactInput.set($event)"
+              (keyup)="submitContactInput($event)"
+              autocomplete="off"
+              autofocus
+            />
+            @if (contactFeedback()) {
+              <div class="status-line">{{ contactFeedback() }}</div>
+            }
+            <button type="button" class="terminal-action character" (mouseenter)="playKeystroke()" (click)="goBack()">
+              [ GO BACK ]
+            </button>
+          </div>
+        }
+
+        @case ('downloading') {
+          <div class="screen-center">{{ downloadText() }}</div>
+        }
+      }
     </div>
   </div>
 
+  <div id="powerbutton" (click)="togglePower()" aria-label="Power button" title="Power"></div>
 
-  <div class="flex items-center p-4 border-t border-gray-700">
-    <span class="mr-2 text-green-500">[ceni@nb-archceni ~]$</span>
-    <input
-      type="text"
-      [(ngModel)]="currentCommand"
-      (keyup)="handleKeyup($event)"
-      class="bg-transparent text-green-400 outline-none flex-grow"
-      autofocus
-    />
+  <div id="audio-container" aria-hidden="true">
+    <audio id="poweron" src="/sound/poweron.ogg"></audio>
+    <audio id="poweroff" src="/sound/poweroff.ogg"></audio>
+    <audio id="kenter" src="/sound/kenter.ogg"></audio>
+    <audio id="passgood" src="/sound/passgood.ogg"></audio>
+    <audio id="passbad" src="/sound/passbad.ogg"></audio>
+    <audio id="k1" src="/sound/k1.ogg"></audio>
+    <audio id="k2" src="/sound/k2.ogg"></audio>
+    <audio id="k3" src="/sound/k3.ogg"></audio>
+    <audio id="k4" src="/sound/k4.ogg"></audio>
+    <audio id="k5" src="/sound/k5.ogg"></audio>
+    <audio id="k6" src="/sound/k6.ogg"></audio>
+    <audio id="k7" src="/sound/k7.ogg"></audio>
+    <audio id="k8" src="/sound/k8.ogg"></audio>
+    <audio id="k9" src="/sound/k9.ogg"></audio>
+    <audio id="k10" src="/sound/k10.ogg"></audio>
   </div>
 </div>

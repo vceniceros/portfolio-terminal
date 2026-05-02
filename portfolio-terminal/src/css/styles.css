@@ -7,20 +7,23 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family: sans-serif;
-}
-#root {
-  height: 100vh;
+  font-family: 'Courier New', monospace;
+  background: #000;
 }
 
-.terminal {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-  font-family: monospace; 
-  line-height: 1.5;
+app-root {
+  min-height: 100vh;
+  display: block;
 }
+
 input:focus {
   outline: none;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  overflow-x: auto;
 }

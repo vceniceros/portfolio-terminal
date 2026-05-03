@@ -34,13 +34,29 @@ jobs:
         working-directory: portfolio-terminal
         run: npm ci
 
+      - name: Resolve deploy base href
+        id: base_href
+        working-directory: portfolio-terminal
+        run: |
+          if [ -f public/CNAME ]; then
+            echo "value=/" >> "$GITHUB_OUTPUT"
+          else
+            echo "value=/portfolio-terminal/" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build application
         working-directory: portfolio-terminal
-        run: npx ng build --base-href /portfolio-terminal/
+        run: npx ng build --base-href "${{ steps.base_href.outputs.value }}"
 
       - name: Create SPA fallback
         working-directory: portfolio-terminal
         run: cp dist/portfolio-terminal/browser/index.html dist/portfolio-terminal/browser/404.html
+
+      - name: Verify built routes
+        working-directory: portfolio-terminal
+        run: |
+          grep -F "<base href=\"${{ steps.base_href.outputs.value }}\">" dist/portfolio-terminal/browser/index.html
+          test -f dist/portfolio-terminal/browser/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

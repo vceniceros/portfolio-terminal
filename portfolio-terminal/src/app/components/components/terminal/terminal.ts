@@ -48,6 +48,11 @@ export class Terminal implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly portfolioService = inject(PortfolioService);
   private readonly subscriptions = new Subscription();
+  private readonly initialRenderRef = afterNextRender(() => {
+    if (this.isBrowser) {
+      this.updateScale();
+    }
+  });
 
   readonly isBrowser = isPlatformBrowser(this.platformId);
   readonly screen = signal<TerminalScreen>('off');
@@ -100,10 +105,6 @@ export class Terminal implements OnInit, OnDestroy {
     if (!this.isBrowser) {
       return;
     }
-
-    afterNextRender(() => {
-      this.updateScale();
-    });
 
     const sub = this.portfolioService.getPortfolio().subscribe({
       next: (data) => {
@@ -379,4 +380,3 @@ export class Terminal implements OnInit, OnDestroy {
     document.documentElement.style.setProperty('--terminal-scale', `${scale}`);
   }
 }
-

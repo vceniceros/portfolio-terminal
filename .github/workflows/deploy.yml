@@ -36,7 +36,7 @@ jobs:
 
       - name: Build application
         working-directory: portfolio-terminal
-        run: npx ng build --base-href /portfolio-terminal/
+        run: npx ng build --base-href /
 
       - name: Create SPA fallback
         working-directory: portfolio-terminal

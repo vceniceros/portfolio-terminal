@@ -36,7 +36,12 @@ jobs:
 
       - name: Build application
         working-directory: portfolio-terminal
-        run: npx ng build --base-href /portfolio-terminal/
+        run: |
+          if [ -f public/CNAME ]; then
+            npx ng build --base-href /
+          else
+            npx ng build --base-href /portfolio-terminal/
+          fi
 
       - name: Create SPA fallback
         working-directory: portfolio-terminal

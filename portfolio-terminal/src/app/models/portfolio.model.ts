@@ -51,6 +51,10 @@ export interface ContactMessagePayload {
 
 export interface ContactMessageResponse {
   ok: boolean;
-  id?: string;
-  createdAt?: string;
+  next?: string;
+  errors?: Array<{
+    field?: string;
+    code?: string;
+    message: string;
+  }>;
 }

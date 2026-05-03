@@ -1,6 +1,6 @@
 {
   "aboutMe": {
-    "photo": "/img/foto-portafolio.jpeg",
+    "photo": "img/foto-portafolio.jpeg",
     "description": "Specialized in building resilient backend architectures, low-level networking, and automation pipelines. My approach treats software like critical infrastructure: designed for maximum uptime, isolated from external failures, and optimized for resource-constrained environments. From designing custom protocol communications to developing enterprise management systems, I engineer digital solutions meant to endure."
   },
   "studies": [

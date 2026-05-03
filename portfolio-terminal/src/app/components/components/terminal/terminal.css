@@ -3,7 +3,7 @@
 	width: 930px;
 	height: 700px;
 	margin: 0 auto;
-	background-image: url('/img/monitorborder.png');
+	background-image: var(--monitor-border);
 	background-size: contain;
 	background-repeat: no-repeat;
 	user-select: none;
@@ -28,7 +28,7 @@
 	width: 750px;
 	height: 460px;
 	margin-left: -375px;
-	background-image: url('/img/bg-off.png');
+	background-image: var(--terminal-bg-off);
 	background-size: cover;
 	background-repeat: no-repeat;
 	color: #33dd88;
@@ -40,7 +40,7 @@
 }
 
 #terminal.power-on {
-	background-image: url('/img/bg.png');
+	background-image: var(--terminal-bg-on);
 }
 
 #terminal::before {
@@ -97,16 +97,8 @@
 }
 
 .menu-layout {
-	display: grid;
-	grid-template-columns: 95px 1fr 95px;
-	gap: 14px;
+	display: block;
 	min-height: 100%;
-}
-
-.pointer-column {
-	line-height: 1.8;
-	letter-spacing: 2px;
-	opacity: 0.9;
 }
 
 .menu-center {

@@ -63,9 +63,6 @@ export class Terminal implements OnInit, OnDestroy {
   readonly contactStatus = signal<'idle' | 'sending' | 'sent' | 'error'>('idle');
   readonly contactFeedback = signal('');
 
-  readonly leftPointers = ['0xA1F0', '0xA1F7', '0xA204', '0xA211', '0xA21E', '0xA22B'];
-  readonly rightPointers = ['0xB404', '0xB411', '0xB41E', '0xB42B', '0xB438', '0xB445'];
-
   readonly contactOrder: ContactField[] = ['name', 'email', 'phone', 'message'];
 
   private readonly contactDraft: ContactDraft = {

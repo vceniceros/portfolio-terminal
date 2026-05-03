@@ -1,4 +1,7 @@
-<div id="terminal-background">
+<div
+  id="terminal-background"
+  style="--monitor-border: url('img/monitorborder.png'); --terminal-bg-off: url('img/bg-off.png'); --terminal-bg-on: url('img/bg.png');"
+>
   <img
     id="terminal-background-off"
     src="img/monitorborder-off.png"
@@ -26,12 +29,6 @@
 
         @case ('main-menu') {
           <div class="menu-layout">
-            <div class="pointer-column">
-              @for (pointer of leftPointers; track pointer) {
-                <div>{{ pointer }}</div>
-              }
-            </div>
-
             <div class="menu-center">
               <div class="menu-head">ROBCO INDUSTRIES TERMALINK</div>
               <div class="menu-sub">VALENTINO CENICEROS - PORTFOLIO</div>
@@ -52,12 +49,6 @@
                   </button>
                 }
               </div>
-            </div>
-
-            <div class="pointer-column">
-              @for (pointer of rightPointers; track pointer) {
-                <div>{{ pointer }}</div>
-              }
             </div>
           </div>
         }

@@ -96,14 +96,18 @@ export class Terminal implements OnInit, OnDestroy {
     { label: 'DOWNLOAD CV', target: 'downloading' as TerminalScreen },
   ];
 
+  constructor() {
+    afterNextRender(() => {
+      if (this.isBrowser) {
+        this.updateScale();
+      }
+    });
+  }
+
   ngOnInit(): void {
     if (!this.isBrowser) {
       return;
     }
-
-    afterNextRender(() => {
-      this.updateScale();
-    });
 
     const sub = this.portfolioService.getPortfolio().subscribe({
       next: (data) => {
@@ -379,4 +383,3 @@ export class Terminal implements OnInit, OnDestroy {
     document.documentElement.style.setProperty('--terminal-scale', `${scale}`);
   }
 }
-

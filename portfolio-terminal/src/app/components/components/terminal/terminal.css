@@ -1,3 +1,15 @@
+:root {
+	--terminal-scale: 1;
+}
+
+#terminal-scaler {
+	display: flex;
+	justify-content: center;
+	overflow: hidden;
+	width: 100%;
+	height: calc(700px * var(--terminal-scale));
+}
+
 #terminal-background {
 	position: relative;
 	width: 930px;
@@ -7,6 +19,9 @@
 	background-size: contain;
 	background-repeat: no-repeat;
 	user-select: none;
+	transform: scale(var(--terminal-scale));
+	transform-origin: top center;
+	flex-shrink: 0;
 }
 
 #terminal-background-off {
@@ -71,6 +86,8 @@
 	position: absolute;
 	width: 54px;
 	height: 50px;
+	padding: 28px;
+	box-sizing: content-box;
 	margin-left: 50%;
 	left: 255px;
 	top: 610px;

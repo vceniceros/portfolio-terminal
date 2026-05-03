@@ -25,5 +25,5 @@ body {
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  overflow-x: auto;
+  overflow-x: hidden;
 }

@@ -1,6 +1,8 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+  afterNextRender,
   Component,
+  HostListener,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
@@ -99,6 +101,10 @@ export class Terminal implements OnInit, OnDestroy {
       return;
     }
 
+    afterNextRender(() => {
+      this.updateScale();
+    });
+
     const sub = this.portfolioService.getPortfolio().subscribe({
       next: (data) => {
         this.portfolio.set(data);
@@ -113,6 +119,11 @@ export class Terminal implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     this.clearScheduledTasks();
+  }
+
+  @HostListener('window:resize')
+  onWindowResize(): void {
+    this.updateScale();
   }
 
   togglePower(): void {
@@ -357,6 +368,15 @@ export class Terminal implements OnInit, OnDestroy {
   private clearScheduledTasks(): void {
     this.timeouts.forEach((timeoutId) => clearTimeout(timeoutId));
     this.timeouts = [];
+  }
+
+  private updateScale(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
+    const scale = Math.min(1, window.innerWidth / 930);
+    document.documentElement.style.setProperty('--terminal-scale', `${scale}`);
   }
 }
 

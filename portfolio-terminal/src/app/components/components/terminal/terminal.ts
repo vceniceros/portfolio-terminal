@@ -48,11 +48,6 @@ export class Terminal implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly portfolioService = inject(PortfolioService);
   private readonly subscriptions = new Subscription();
-  private readonly initialRenderRef = afterNextRender(() => {
-    if (this.isBrowser) {
-      this.updateScale();
-    }
-  });
 
   readonly isBrowser = isPlatformBrowser(this.platformId);
   readonly screen = signal<TerminalScreen>('off');
@@ -100,6 +95,14 @@ export class Terminal implements OnInit, OnDestroy {
     { label: 'CONTACT ME', target: 'contact-options' as TerminalScreen },
     { label: 'DOWNLOAD CV', target: 'downloading' as TerminalScreen },
   ];
+
+  constructor() {
+    afterNextRender(() => {
+      if (this.isBrowser) {
+        this.updateScale();
+      }
+    });
+  }
 
   ngOnInit(): void {
     if (!this.isBrowser) {

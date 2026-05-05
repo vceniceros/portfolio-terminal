@@ -38,7 +38,7 @@ jobs:
         id: base_href
         working-directory: portfolio-terminal
         run: |
-          if [[ "${{ github.event.repository.name }}" == *.github.io ]]; then
+          if [[ -f public/CNAME || "${{ github.event.repository.name }}" == *.github.io ]]; then
             echo "value=/" >> "$GITHUB_OUTPUT"
           else
             echo "value=/${{ github.event.repository.name }}/" >> "$GITHUB_OUTPUT"

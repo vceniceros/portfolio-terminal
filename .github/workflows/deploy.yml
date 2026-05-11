@@ -18,6 +18,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      base_href: ${{ steps.base_href.outputs.value }}
 
     steps:
       - name: Checkout
@@ -38,7 +40,7 @@ jobs:
         id: base_href
         working-directory: portfolio-terminal
         run: |
-          if [[ -f public/CNAME || "${{ github.event.repository.name }}" == *.github.io ]]; then
+          if [[ "${{ github.event.repository.name }}" == *.github.io ]]; then
             echo "value=/" >> "$GITHUB_OUTPUT"
           else
             echo "value=/${{ github.event.repository.name }}/" >> "$GITHUB_OUTPUT"
@@ -74,3 +76,23 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Verify deployed page responds
+        run: |
+          set -euo pipefail
+          page_url="${{ steps.deployment.outputs.page_url }}"
+          status_code=$(curl -s -o /dev/null -w "%{http_code}" "$page_url")
+
+          if [[ "$status_code" -lt 200 || "$status_code" -ge 400 ]]; then
+            echo "Deployment URL is not healthy: $page_url (status $status_code)"
+            exit 1
+          fi
+
+      - name: Verify deployed base href
+        run: |
+          set -euo pipefail
+          page_url="${{ steps.deployment.outputs.page_url }}"
+          expected_base="${{ needs.build.outputs.base_href }}"
+
+          html=$(curl -sL "$page_url")
+          echo "$html" | grep -F "<base href=\"$expected_base\">"

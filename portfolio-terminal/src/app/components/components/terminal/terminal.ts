@@ -317,13 +317,38 @@ export class Terminal implements OnInit, OnDestroy {
     this.typewrite('ACCESSING FILE...', 35, this.downloadText, () => {
       const cvUrl = this.portfolio()?.cvUrl;
       if (cvUrl && this.isBrowser) {
-        window.open(cvUrl, '_blank', 'noopener');
+        const downloadUrl = this.resolveCvDownloadUrl(cvUrl);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.download = 'Valentino-Ceniceros-CV.pdf';
+        link.click();
       }
       const timeoutId = setTimeout(() => {
         this.screen.set('main-menu');
       }, 1200);
       this.timeouts.push(timeoutId);
     });
+  }
+
+  private resolveCvDownloadUrl(cvUrl: string): string {
+    if (!cvUrl.includes('overleaf.com')) {
+      return cvUrl;
+    }
+
+    if (cvUrl.includes('/output/output.pdf')) {
+      try {
+        const url = new URL(cvUrl);
+        url.searchParams.set('download', '1');
+        return url.toString();
+      } catch {
+        return cvUrl;
+      }
+    }
+
+    const trimmed = cvUrl.replace(/\/+$/, '');
+    return `${trimmed}/output/output.pdf?download=1`;
   }
 
   private typewrite(

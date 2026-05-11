@@ -39,6 +39,11 @@
       "name": "portfolio-terminal",
       "description": "Personal portfolio website designed to mimic a terminal interface, showcasing projects and skills in a unique and interactive way.",
       "github": "https://github.com/vceniceros/portfolio-terminal"
+    },
+    {
+      "name": "crm.ycc.group",
+      "description": "A production CRM platform used at YCC to organize operational tasks, assign responsibilities, and track internal workflow execution in one centralized system.",
+      "github": "https://crm.ycc.group"
     }
   ],
   "languages": [
@@ -46,7 +51,7 @@
       "name": "TypeScript",
       "description": "Primary language for Angular frontend applications and typed backend services.",
       "projects": [
-        "portfolio-terminal", "consorcio-360", "teko-pora-upgrade", "ycc-group-crm"
+        "portfolio-terminal", "consorcio-360", "teko-pora-upgrade", "crm.ycc.group"
       ],
       "proficiency": "Intermediate"
     },
@@ -62,7 +67,7 @@
       "name": "Python",
       "description": "Utilized for scripting, automation, and backend development in Django applications.",
       "projects": [
-        "consorcio-360", "starlink bus management system", "ycc-group-crm"
+        "consorcio-360", "starlink bus management system", "crm.ycc.group"
       ],
       "proficiency": "Advanced"
     },
@@ -70,7 +75,7 @@
       "name": "SQL",
       "description": "Proficient in designing and querying relational databases for various applications.",
       "projects": [
-        "consorcio-360", "futbol-5-manager", "ycc-group-crm"
+        "consorcio-360", "futbol-5-manager", "crm.ycc.group"
       ],
       "proficiency": "Advanced"
     }
@@ -81,5 +86,5 @@
     "linkedin": "https://linkedin.com/in/valentino_ceniceros",
     "github": "https://github.com/vceniceros"
   },
-  "cvUrl": "https://www.overleaf.com/project/69a43dfc247dfe5b7ccc0556/user/661068357a6631352138a89a/build/19df85636e3-c70fb4e166fef657/output/output.pdf?clsiserverid=clsi-pre-emp-c3d-c-f-21ml&editorId=46369ad7-a81c-442e-8f76-ed763cbafd2d&compileGroup=standard/download"
+  "cvUrl": "https://www.overleaf.com/project/69a43dfc247dfe5b7ccc0556/output/output.pdf?download=1"
 }
